@@ -1,1 +1,4 @@
 print("xd")
+
+
+print("walekoniawdomuciemnanocapokrjomu")
