@@ -30,14 +30,18 @@ def handle(client):
             break
 
 def receive():
-    while True:
+    while True: #akceptujemy klienta
         client, address = server.accept()
         print(f"Someone is connecting from {str(address)}")
 
         client.send('NICK'.encode('ascii')) # wysyłamy słowo kluczowe do klienta
-        nickname = client.recv(1024).decode('ascii')
-        nicknames.append(nickname)
+        nickname = client.recv(1024).decode('ascii') # otrzymujemy nick od klienta
+        nicknames.append(nickname) 
         clients.append(client)
 
         print(f'His nickname is {nickname}')
-        broadcast(f'{nickname} arrives!') #nadajemy do wszystkich klientów wiadomości broadcastem
+        broadcast(f'{nickname} arrives!'.encode('ascii')) #nadajemy do wszystkich klientów wiadomości broadcastem
+        client.send('Welcome to the chat'.encode('ascii')) # wysyłamy wiadomość do tego klienta co sie połączył
+
+        thread = threading.Thread(target = handle, args = (client, )) #rozpoczynamy wątek z obslugą klienta
+        thread.start()
